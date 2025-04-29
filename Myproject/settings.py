@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-xug1i+ovuju*$6lxxtqubf6r07k_ff!i6b9zsk%qyx+p_fs5+a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['smart-meeting-room.onrender.com']
 
 
 # Application definition
