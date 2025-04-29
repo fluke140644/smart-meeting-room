@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบจองห้องประชุม</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    .sidebar-transition {
+      transition: all 0.3s;
+    }
+    /* ปรับให้ปุ่ม hamburger อยู่ข้างล่าง */
+    #hamburger {
+      position: fixed;
+      /* bottom: 20px; */
+      top: 20;
+      left: 20px;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+    <nav class=" top-0 left-0 right-0 bg-gradient-to-r from-green-500 to-blue-500 text-white flex justify-between items-center px-4 py-3 shadow z-50">
+        <div class="flex items-center space-x-2">
+          <img src="https://sdh.go.th/img/sdh.jpg" class="w-10 h-10 rounded-full" alt="logo">
+          <span class="text-xl font-bold">ระบบจองห้องประชุม</span>
+        </div>
+        <button onclick="openSidebar()" class="text-2xl md:hidden">
+          &#9776;
+        </button>
+      </nav>
+      
+
+
+  <div class="flex min-h-screen">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar-transition w-64 bg-gray-800 text-white p-4">
+      <div class="flex justify-between items-center mb-6">
+        
+        <h1 class="text-xl font-bold">เมนู</h1>
+        
+        <button onclick="closeSidebar()" class="text-white text-2xl">&times;</button>
+      </div>
+      <ul class="space-y-2">
+        <li><a href="/" class="block hover:text-yellow-400" style="background-color: #1f2d3f; ">🏠 Home</a></li>
+        <li><a href="/about" class="block hover:text-yellow-400"> รายละเอียดห้องประชุม</a></li>
+        <li><a href="/login" class="block hover:text-yellow-400">เข้าสู่ระบบ</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-6">
+      
+      <!-- Hamburger (default hidden) -->
+      <button id="hamburger" onclick="openSidebar()" class="mb-4 text-2xl text-gray-700 hidden">&#9776;</button>
+
+
+<script>
+function closeSidebar() {
+  document.getElementById('sidebar').classList.add('hidden');
+  document.getElementById('hamburger').classList.remove('hidden');
+}
+
+function openSidebar() {
+  document.getElementById('sidebar').classList.remove('hidden');
+  document.getElementById('hamburger').classList.add('hidden');
+}
+</script>
+
+</body>
+</html>

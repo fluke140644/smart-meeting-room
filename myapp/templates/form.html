@@ -1,0 +1,203 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบจองห้องประชุม</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    .sidebar-transition {
+      transition: all 0.3s;
+    }
+
+    #sidebar {
+      transform: translateX(-100%);
+    }
+
+    #sidebar.active {
+      transform: translateX(0);
+    }
+
+    /* Content move when sidebar active */
+    .content-transition {
+      transition: all 0.3s;
+    }
+
+    .content-move {
+      margin-left: 16rem;
+      /* กว้างเท่า sidebar 64 = 16rem */
+    }
+
+    /*.background-color: #f5f5f5;
+      font-family: 'Tahoma', sans-serif;
+    }*/
+    .content-container {
+      padding: 20px;
+      background-color: white;
+      margin-top: 20px;
+      border-radius: 8px;
+    }
+    .search-bar {
+      margin-bottom: 20px;
+    }
+    .status-btn {
+      width: 60px;
+    }
+    .table > :not(caption) > * > * {
+      vertical-align: middle;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100">
+
+  <!-- Navbar -->
+  <nav
+    class="fixed top-0 left-0 right-0 bg-gradient-to-r from-green-500 to-blue-500 text-white flex justify-between items-center px-4 py-3 shadow z-50">
+    <div class="flex items-center space-x-2">
+
+      <!-- Hamburger -->
+      <button id="hamburger" onclick="toggleSidebar()" class="text-3xl text-white mr-2">&#9776;</button>
+
+      <!-- Logo & Title -->
+      <a href="/"><img src="https://sdh.go.th/img/sdh.jpg" class="w-10 h-10 rounded-full" alt="logo"></a>
+      <span class="text-xl font-bold">ระบบจองห้องประชุม</span>
+    </div>
+  </nav>
+<hr class="border-gray-500 mb-4">
+  <!-- Content -->
+  <div id="main-content" class="flex flex-wrap gap-4 mt-4 p-2 justify-content-center content-transition">
+    <div class="pt-20 px-2">
+    <div class="content-container w-full">
+      <h2>จองใช้ห้อง</h2><br>
+    
+      <!-- ค้นหา -->
+      <div class="row search-bar">
+        <div class="col-md-2">
+          <label>วันที่ให้ห้อง</label>
+          <input type="date" class="form-control">
+        </div>
+        <div class="col-md-2">
+          <label>ถึง</label>
+          <input type="date" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <label>สถานะ</label>
+          <select class="form-select">
+            <option>===ทุกสถานะ===</option>
+            <option>อนุมัติ</option>
+            <option>ยกเลิก</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label>คำค้น</label>
+          <input type="text" class="form-control" placeholder="ชื่อห้อง, เลขที่ใบจอง">
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button class="btn btn-primary w-100">ค้นหา</button>
+        </div>
+      </div>
+    
+      <!-- ตารางการจอง -->
+      <table class="table table-bordered table-striped">
+        <thead class="table-light">
+          <tr>
+            <th>สถานะ</th>
+          <th>รหัสการจอง</th>
+          <th>วัน/เวลา</th>
+          <th>ห้องประชุม / หัวข้อ</th>
+          <th>การดำเนินการ</th>
+          </tr>
+        </thead>
+  <tbody>
+    {% for booking in bookings %}
+    <tr>
+      <td>
+        {% if booking.status == "approved" %}
+        <span class="badge bg-success">อนุมัติ</span>
+        {% else %}
+        <span class="badge bg-danger">ยกเลิก</span>
+        {% endif %}
+      </td>
+      <td>{{ booking.booking_code }}</td>
+      <td>
+        {{ booking.start_datetime|date:"d M Y H:i" }}<br>
+        ถึง {{ booking.end_datetime|date:"d M Y H:i" }}
+      </td>
+      <td>
+        <strong>{{ booking.room_name }}</strong><br>
+        {{ booking.topic }}
+      </td>
+      <td><a href="{% url 'booking_detail' booking.id %}" class="btn btn-sm btn-info">แสดง</a></td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="5" class="text-center">ไม่มีรายการจอง</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+        
+      </table>
+    
+      <!-- pagination -->
+      <nav>
+        <ul class="pagination justify-content-center">
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">4</a></li>
+          <li class="page-item"><a class="page-link" href="#">></a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar"
+      class="sidebar-transition w-64 bg-gray-800 text-white p-10 fixed top-5 left-0 h-full z-40 pt-16">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-xl font-bold">เมนู</h1>
+        <button onclick="toggleSidebar()" class="text-white text-3xl">&times;</button>
+      </div>
+      <ul class="space-y-2">
+        <li><a href="/" class="block hover:text-yellow-400 bg-gray-700 p-2 rounded">🏠 Home</a></li>
+        <li><a href="/about" class="block hover:text-yellow-400 bg-gray-700 p-2 rounded">รายละเอียดห้องประชุม</a></li>
+        <li><a href="/RoomBooking" class="block hover:text-yellow-400 bg-gray-700 p-2 rounded ">จองห้องประชุม</a></li>
+        <li><a href="/login" class="block hover:text-yellow-400 bg-gray-700 p-2 rounded">เข้าสู่ระบบ</a></li>
+      </ul>
+      <footer>
+        <div class="absolute bottom-4 right-4 left-4">
+          <hr class="border-gray-600 mb-2">
+          <h4 class="text-sm text-gray-400 text-right p-4">Version 0.0.1</h4>
+        </div>
+      </footer>
+    </aside>
+
+
+  </div>
+  
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const content = document.getElementById('main-content');
+
+      sidebar.classList.toggle('active');
+      content.classList.toggle('content-move');
+    }
+  </script>
+
+
+</body>
+
+</html>
+

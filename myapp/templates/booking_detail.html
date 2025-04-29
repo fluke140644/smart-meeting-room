@@ -1,0 +1,266 @@
+
+<!-- -------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบจองห้องประชุม</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    .sidebar-transition {
+      transition: all 0.3s;
+    }
+
+    #sidebar {
+      transform: translateX(-100%);
+    }
+
+    #sidebar.active {
+      transform: translateX(0);
+    }
+
+    /* Content move when sidebar active */
+    .content-transition {
+      transition: all 0.3s;
+    }
+
+    .content-move {
+      margin-left: 16rem;
+      /* กว้างเท่า sidebar 64 = 16rem */
+    }
+
+    /*.background-color: #f5f5f5;
+      font-family: 'Tahoma', sans-serif;
+    }*/
+    .content-container {
+      padding: 20px;
+      background-color: white;
+      margin-top: 20px;
+      border-radius: 8px;
+    }
+
+    .search-bar {
+      margin-bottom: 20px;
+    }
+
+    .status-btn {
+      width: 60px;
+    }
+
+    .table> :not(caption)>*>* {
+      vertical-align: middle;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100">
+
+  <!-- Navbar -->
+  <nav
+    class="fixed top-0 left-0 right-0 h-16 bg-gradient-to-r from-green-500 to-blue-500 text-white flex justify-between items-center px-4 shadow z-50">
+    <div class="flex items-center space-x-2">
+      <!-- Hamburger -->
+      <button onclick="toggleSidebar()" class="text-3xl text-white mr-2">&#9776;</button>
+      <!-- Logo & Title -->
+      <a href="/home"><img src="https://sdh.go.th/img/sdh.jpg" class="w-10 h-10 rounded-full" alt="logo"></a>
+      <span class="text-xl font-bold">ระบบจองห้องประชุม</span>
+    </div>
+  </nav>
+
+  <!-- Sidebar -->
+  <aside id="sidebar"
+    class="fixed top-16 left-0 w-64 h-[calc(100%-4rem)] bg-gray-800 text-white p-4 z-40 flex flex-col justify-between">
+    <div>
+      {% if user.is_authenticated %}
+      <!-- User Info -->
+      <div class="flex items-center space-x-3 mb-6 bg-gray-700 p-3 rounded">
+        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-800 text-xl">👤</div>
+        <div>
+          <div class="font-semibold">ชื่อ: {{ user.get_full_name|default:user.username }}</div>
+          <div class="text-sm text-gray-300">สถานะ: {{ user.is_staff|yesno:"admin,user" }}</div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- เมนู -->
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-xl font-bold">เมนู</h1>
+        <button onclick="toggleSidebar()" class="text-white text-3xl">&times;</button>
+      </div>
+      <ul class="space-y-2">
+        <li><a href="/home" class="block hover:text-yellow-400 bg-gray-700 p-2 rounded">🏠 Home</a></li>
+        <li><a href="/about" class="block hover:text-yellow-400 bg-gray-700 p-2 rounded">รายละเอียดห้องประชุม</a></li>
+        <li><a href="/RoomBooking" class="block hover:text-yellow-400 bg-gray-700 p-2 rounded">จองห้องประชุม</a></li>
+      </ul>
+    </div>
+
+    <!-- Logout -->
+    <div>
+      <form method="post" action="{% url 'logout' %}" class="mt-6">
+        {% csrf_token %}
+        <button type="submit" class="w-full hover:text-yellow-400 bg-gray-700 p-2 rounded">🚪 ออกจากระบบ</button>
+      </form>
+      <hr class="border-gray-600 my-2">
+      <h4 class="text-sm text-gray-400 text-right">Version 0.0.1</h4>
+    </div>
+  </aside>
+
+
+  <hr class="border-gray-500 mb-4">
+  <!-- Content -->
+  <div id="main-content" class="flex flex-wrap gap-4 mt-4 p-2 justify-content-center content-transition">
+    <div class="pt-20 px-2">
+      <div class="content-container w-full">
+        <!-- หัวข้อและปุ่มกลับ -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h1 class="mb-0">
+            <strong style="font-size: large;">รายละเอียดการจองห้องประชุม</strong>
+          </h1>
+
+        </div>
+
+        <!-- รายละเอียดการจอง -->
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <h5 class="card-title mb-3"> <strong > รหัสการจอง : </strong> {{ booking.booking_code }}</h5>
+
+            <div class="row mb-2">
+              <div class="col-md-6">
+                <strong>ห้องประชุม :</strong> <strong id="room-name">{{ booking.room_name }}
+              </div></strong>
+
+              <div class="col-md-6">
+                <strong>หัวข้อ :</strong> {{ booking.topic|default:"-" }}
+              </div>
+
+
+              <div class="col-md-6">
+                <strong>ชื่อผู้ขอใช้ :</strong> {{ booking.n_req}}
+              </div>
+
+
+              <div class="col-md-6">
+                <strong>เบอร์ติดต่อ :</strong> {{ booking.n_ph}}
+              </div>
+
+
+              <div class="col-md-6">
+                <strong>ประธานการประชุม :</strong> {{ booking.h_pr}}
+              </div>
+
+
+              <div class="col-md-6">
+                <strong>จำนวนผู้เข้าประชุม :</strong> {{ booking.n_count}}
+              </div>
+
+
+              <div class="col-md-6">
+                <strong>รายชื่อผู้เข้าประชุม :</strong> {{ booking.n_list}}
+              </div>
+
+
+              <div class="col-md-6">
+                <strong>ใช้สำหรับแผนก :</strong> {{ booking.dpm_sd}}
+              </div>
+            
+            <!-- <div class="row mb-2"> -->
+              <div class="col-md-6">
+                <strong style="color: #0ac500;">เริ่ม :</strong> {{ booking.start_datetime|date:"d M Y เวลา H:i" }}
+              </div>
+              <div class="col-md-6">
+                <strong style="color: #ee2c2c;" >สิ้นสุด :</strong> {{ booking.end_datetime|date:"d M Y เวลา H:i" }}
+              </div>
+
+              <div class="col-md-6">
+                <br>
+                <strong>อุปกรณ์ที่เลือก :</strong>
+                {% if equipment_data %}
+                  <ul>
+                    {% for item in equipment_data %}
+                      <li>{{ item.name }} : {{ item.quantity }} ชิ้น</li>
+                    {% endfor %}
+                  </ul>
+                {% else %}
+                  <p>ไม่มีอุปกรณ์ที่เลือก</p>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <strong>สถานะ :</strong>
+                {% if booking.status == "approved" %}
+                <span class="badge" style="background-color: #28a745;">อนุมัติ</span>
+                {% elif booking.status == "pending" %}
+                <span class="badge" style="background-color: #ffc107;">รออนุมัติ</span>
+                {% elif booking.status == "cancelled" %}
+                <span class="badge" style="background-color: #dc3545;">ยกเลิก</span>
+                {% else %}
+                <span class="badge" style="background-color: #6c757d;">ไม่ระบุสถานะ</span>
+                {% endif %}
+
+              </div>
+            </div>
+            <br>
+
+            <a href="{% url 'roombooking' %}" class="btn btn-primary">กลับ</a>
+            {% if booking.status != "cancelled" %}
+            <a href="{% url 'edit_booking' booking.id %}" class="btn btn-warning ms-2">
+              แก้ไขการจอง
+            </a>
+
+            <form action="{% url 'cancel_booking' booking.id %}" method="post" style="display: inline; float: right;">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger ms-2"
+                onclick="return confirm('คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการจองนี้?');">
+                ยกเลิกการจอง
+              </button>
+            </form>
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const content = document.getElementById('main-content');
+
+      sidebar.classList.toggle('active');
+      content.classList.toggle('content-move');
+    }
+// -----------------------------------------------------------------
+    const roomColors = {
+    "ห้องประชุมเพรชสมเด็จ": "#0033FF",
+    "ห้องประชุมผาเสวย": "#228B22",
+    "ห้องประชุมย่อย(วัคซีน 1)": "#A020F0",
+    "ห้องประชุมภูเงิน": "#FF1493"
+  };
+
+  const roomName = "{{ booking.room_name }}";
+  const roomElement = document.getElementById("room-name");
+  if (roomColors[roomName]) {
+    roomElement.style.color = roomColors[roomName];  // เปลี่ยนแค่สีตัวอักษร
+  } else {
+    roomElement.style.color = "#000000";  // สีดำ (หากไม่มีห้องที่ตรงกัน)
+  }
+  </script>
+
+
+</body>
+
+</html>
