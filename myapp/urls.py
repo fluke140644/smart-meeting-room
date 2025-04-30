@@ -2,11 +2,8 @@ from django.urls import path
 from myapp import views
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.views import LogoutView
-<<<<<<< HEAD
 from django.conf import settings
 from django.conf.urls.static import static
-=======
->>>>>>> 60889e62c08c5fa0062e5222bf333229206e6e7f
 
 urlpatterns = [
     path('',views.index),
@@ -45,13 +42,7 @@ urlpatterns = [
     path('booking/cancel/<int:booking_id>/', views.cancel_booking, name='cancel_booking'),
 # ปุ่มเเก้ไข booking_detail
     path('booking/edit/<int:booking_id>/', views.edit_booking, name='edit_booking'),
-<<<<<<< HEAD
     path('add-equipment/', views.add_equipment, name='add_equipment'),
     path('check_room_availability/', views.check_room_availability, name='check_room_availability')
     
 ]   + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-=======
-    path('add-equipment/', views.add_equipment, name='add_equipment')
-    
-]
->>>>>>> 60889e62c08c5fa0062e5222bf333229206e6e7f
