@@ -1,0 +1,156 @@
+.sidebar-transition {
+    transition: all 0.3s;
+  }
+
+  /* ซ่อน Sidebar เริ่มต้น */
+  #sidebar {
+    transform: translateX(-100%);
+  }
+
+  /* ถ้ากดเปิด */
+  #sidebar.active {
+    transform: translateX(0);
+  }
+
+  /* Content move when sidebar active */
+  .content-transition {
+    transition: all 0.3s;
+  }
+
+  .content-move {
+    margin-left: 16rem;
+    /* กว้างเท่า sidebar 64 = 16rem */
+  }
+
+  /* พื้นหลังหน้าจอ */
+  body {
+    margin: 40px;
+    font-family: 'Sarabun', sans-serif;
+    height: 100vh;
+    animation: gradientBG 15s infinite alternate;
+    background: linear-gradient(-45deg, #4FC3F7, #81C784, #F1F8E9, #607D8B);
+    background-size: 400% 400%;
+  }
+
+  @keyframes gradientBG {
+    0% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  #calendar {
+    max-width: 2000px;
+    /* ขยายความกว้างแนวนอน*/
+    margin: 0 auto;
+    min-height: 200px;
+    /* เพิ่มความสูงแนวตั้ง */
+    border: 1px solid #000000;
+    /* ขอบไว้ดูขนาด */
+  }
+
+  .fc .fc-day-today {
+    background-color: #3a3a3a1f !important;
+  }
+
+  .fc-col-header-cell {
+    background-color: #d3d3d3 !important;
+  }
+
+  .fc-daygrid-day {
+    border: 1px solid #4b4b4b73 !important;
+    /* สีเทา */
+  }
+
+  /* alert ปฏิทิน */
+  .swal2-popup {
+    text-align: left;
+    direction: ltr;
+    /* ใช้ในการตั้งค่าทิศทางของข้อความเป็นซ้าย */
+  }
+
+  .swal2-title {
+    text-align: left;
+    /* หัวข้อของข้อความ */
+  }
+
+  .swal2-content {
+    text-align: left;
+    /* เนื้อหาหลัก */
+  }
+
+  .swal2-html-container {
+    margin-left: 0;
+    /* ลดช่องว่างด้านซ้าย */
+  }
+
+  .swal2-popup p {
+    margin: 0 0 10px 0;
+    /* จัดระยะห่างระหว่างข้อความ */
+  }
+
+  /* ปุ่มปิด alert swt2 */
+  /* เปลี่ยนสีปุ่ม confirm เป็นสีแดง */
+  .swal2-confirm {
+    background-color: #b60101;
+    /* สีแดง */
+    border-color: #FF0000;
+    /* ขอบปุ่มสีแดง */
+    color: white;
+    /* ข้อความในปุ่มเป็นสีขาว */
+  }
+
+  /* เมื่อมีการ hover ปุ่มจะเป็นสีแดงเข้ม */
+  .swal2-confirm:hover {
+    background-color: #d10000b7;
+    border-color: #d10000b7;
+  }
+
+  .fc-daygrid-day-frame {
+    position: relative;
+  }
+
+  .fc-holiday-label {
+
+    font-size: 0.7rem;
+    white-space: normal;
+    word-break: break-word;
+    max-width: 100%;
+    color: red;
+    font-weight: bold;
+
+  }
+
+  /* ปรับให้ข้อความภายในอีเวนต์ในปฏิทินไม่ล้น */
+  .fc-event-title,
+  .fc-event-time {
+    white-space: normal !important;
+    word-break: break-word;
+    font-size: 0.75rem;
+    /* ขนาดเล็กลง */
+  }
+
+
+  /* ปรับ font ของ calendar */
+  @media (max-width: 768px) {
+    #calendar {
+      padding: 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    .fc .fc-toolbar-title {
+      font-size: 1rem;
+    }
+
+    .fc .fc-button {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.8rem;
+    }
+  }
