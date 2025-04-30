@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แก้ไขการจองห้องประชุม</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .content-container {
+            padding: 20px;
+            background-color: white;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+
+        .table> :not(caption)>*>* {
+            vertical-align: middle;
+        }
+
+        .sidebar-transition {
+            transition: all 0.3s;
+        }
+
+        /* ซ่อน Sidebar เริ่มต้น */
+        #sidebar {
+            transform: translateX(-100%);
+        }
+
+        /* ถ้ากดเปิด */
+        #sidebar.active {
+            transform: translateX(0);
+        }
+
+        /* Content move when sidebar active */
+        .content-transition {
+            transition: all 0.3s;
+        }
+
+        .content-move {
+            margin-left: 16rem;
+            /* กว้างเท่า sidebar 64 = 16rem */
+        }
+
+        .was-validated input:invalid {
+            border: 2px solid red;
+            background-color: #ffe5e5;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 h-16 bg-gradient-to-r from-green-500 to-blue-500 text-white flex justify-between items-center px-4 shadow z-50">
+        <div class="flex items-center space-x-2">
+            <button onclick="toggleSidebar()" class="text-3xl text-white mr-2">&#9776;</button>
+            <a href="/home"><img src="https://sdh.go.th/img/sdh.jpg" class="w-10 h-10 rounded-full" alt="logo"></a>
+            <span class="text-xl font-bold">ระบบจองห้องประชุม</span>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed top-16 left-0 w-64 h-[calc(100%-4rem)] bg-gray-800 text-white p-4 z-40 flex flex-col justify-between">
+        <div>
+            {% if user.is_authenticated %}
+            <!-- User Info -->
+            <div class="flex items-center space-x-3 mb-6 bg-gray-700 p-3 rounded">
+                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-800 text-xl">👤</div>
+                <div>
+                    <div class="font-semibold">ชื่อ: {{ user.get_full_name|default:user.username }}</div>
+                    <div class="text-sm text-gray-300">สถานะ: {{ user.is_staff|yesno:"admin,user" }}</div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-xl font-bold">เมนู</h1>
+                <button onclick="toggleSidebar()" class="text-white text-3xl">&times;</button>
+            </div>
+            <ul class="space-y-2">
+                <li><a href="/home" class="block hover:text-yellow-400 bg-gray-700 p-2 rounded">🏠 Home</a></li>
+                <li><a href="/about" class="block hover:text-yellow-400 bg-gray-700 p-2 rounded">รายละเอียดห้องประชุม</a></li>
+                <li><a href="/RoomBooking" class="block hover:text-yellow-400 bg-gray-700 p-2 rounded">จองห้องประชุม</a></li>
+            </ul>
+        </div>
+
+        <!-- Logout -->
+        <div>
+            <form method="post" action="{% url 'logout' %}" class="mt-6">
+                {% csrf_token %}
+                <button type="submit" class="w-full hover:text-yellow-400 bg-gray-700 p-2 rounded">🚪 ออกจากระบบ</button>
+            </form>
+            <hr class="border-gray-600 my-2">
+            <h4 class="text-sm text-gray-400 text-right">Version 0.0.1</h4>
+        </div>
+    </aside>
+
+    {% load static %}
+
+    <!-- Main Content -->
+    <main class="min-h-screen px-10 pt-32">
+        <h2 class="text-3xl font-bold text-center text-gray-700 mb-10">แก้ไขการจองห้อง</h2>
+
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-start">
+            <!-- Left: Form -->
+            <div class="bg-white p-8 rounded-2xl shadow-lg w-full md:w-1/2">
+                <form method="post" action="{% url 'edit_booking' booking.id %}">
+                    {% csrf_token %}
+                    <div class="mb-4 border border-gray-300 rounded-lg p-4 shadow-sm">
+                        <label class="block text-gray-700 font-semibold mb-2">ชื่อห้อง :</label>
+                        <select name="room_name" required class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-400">
+                            <option value="">-- กรุณาเลือกห้องประชุม --</option>
+                            <option value="ห้องประชุมเพรชสมเด็จ" {% if booking.room_name == "ห้องประชุมเพรชสมเด็จ" %}selected{% endif %}>ห้องประชุมเพรชสมเด็จ</option>
+                            <option value="ห้องประชุมภูเงิน" {% if booking.room_name == "ห้องประชุมภูเงิน" %}selected{% endif %}>ห้องประชุมภูเงิน</option>
+                            <option value="ห้องประชุมย่อย(วัคซีน 1)" {% if booking.room_name == "ห้องประชุมย่อย(วัคซีน 1)" %}selected{% endif %}>ห้องประชุมย่อย(วัคซีน 1)</option>
+                            <option value="ห้องประชุมผาเสวย" {% if booking.room_name == "ห้องประชุมผาเสวย" %}selected{% endif %}>ห้องประชุมผาเสวย</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4 border border-gray-300 rounded-lg p-4 shadow-sm">
+                        <label class="block text-gray-700 font-semibold mb-2">วาระการประชุม :</label>
+                        <input type="text" name="topic" value="{{ booking.topic }}" required class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-400">
+                    </div>
+
+                    <div class="mb-4 border border-gray-300 rounded-lg p-4 shadow-sm">
+                        <label class="block text-gray-700 font-semibold mb-2">ประธานการประชุม :</label>
+                        <input type="text" name="h_pr" value="{{ booking.h_pr }}" required class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-400">
+                    </div>
+
+                    <div class="mb-4 border border-gray-300 rounded-lg p-4 shadow-sm">
+                        <label class="block text-gray-700 font-semibold mb-2">ใช้สำหรับแผนก :</label>
+                        <select name="dpm_sd" required class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-400">
+                            <option value="">-- กรุณาเลือกแผนก --</option>
+                            <option value="เทคโนโลยีสารสนเทศ (IT)" {% if booking.dpm_sd == "เทคโนโลยีสารสนเทศ (IT)" %}selected{% endif %}>เทคโนโลยีสารสนเทศ (IT)</option>
+                            <option value="อุบัติเหตุ-ฉุกเฉิน (ER)" {% if booking.dpm_sd == "อุบัติเหตุ-ฉุกเฉิน (ER)" %}selected{% endif %}>อุบัติเหตุ-ฉุกเฉิน (ER)</option>
+                            <option value="ห้องบัตร" {% if booking.dpm_sd == "ห้องบัตร" %}selected{% endif %}>ห้องบัตร</option>
+                            <option value="ห้องรังสี" {% if booking.dpm_sd == "ห้องรังสี" %}selected{% endif %}>ห้องรังสี</option>
+                            <option value="ห้องคลอด" {% if booking.dpm_sd == "ห้องคลอด" %}selected{% endif %}>ห้องคลอด</option>
+                            <option value="ห้องผ่าตัด" {% if booking.dpm_sd == "ห้องผ่าตัด" %}selected{% endif %}>ห้องผ่าตัด</option>
+                            <option value="ห้องคุณภาพเเละแผนงาน" {% if booking.dpm_sd == "ห้องคุณภาพเเละแผนงาน" %}selected{% endif %}>ห้องคุณภาพเเละแผนงาน</option>
+                            <option value="งานจิตเวช" {% if booking.dpm_sd == "งานจิตเวช" %}selected{% endif %}>งานจิตเวช</option>
+                            <option value="บริหารทั่วไป" {% if booking.dpm_sd == "บริหารทั่วไป" %}selected{% endif %}>บริหารทั่วไป</option>
+                            <option value="พัสดุ" {% if booking.dpm_sd == "พัสดุ" %}selected{% endif %}>พัสดุ</option>
+                            <option value="เวชระเบียน" {% if booking.dpm_sd == "เวชระเบียน" %}selected{% endif %}>เวชระเบียน</option>
+                            <option value="คลินิกโรคเรื้อรัง" {% if booking.dpm_sd == "คลินิกโรคเรื้อรัง" %}selected{% endif %}>คลินิกโรคเรื้อรัง</option>
+                            <option value="คลินิกโรคทางเดินหายใจ" {% if booking.dpm_sd == "คลินิกโรคทางเดินหายใจ" %}selected{% endif %}>คลินิกโรคทางเดินหายใจ</option>
+                            <option value="แผนไทย" {% if booking.dpm_sd == "แผนไทย" %}selected{% endif %}>แผนไทย</option>
+                            <option value="ปฐมภูมิ" {% if booking.dpm_sd == "ปฐมภูมิ" %}selected{% endif %}>ปฐมภูมิ</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4 border border-gray-300 rounded-lg p-4 shadow-sm">
+                        <label class="block text-gray-700 font-semibold mb-2">ชื่อผู้ขอใช้ :</label>
+                        <input type="text" name="n_req" value="{{ booking.n_req }}" required class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-400">
+                    </div>
+
+                    <div class="mb-4 border border-gray-300 rounded-lg p-4 shadow-sm">
+                        <label class="block text-gray-700 font-semibold mb-2">เบอร์ติดต่อ :</label>
+                        <input type="text" name="n_ph" value="{{ booking.n_ph }}" required class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-400">
+                    </div>
+
+                    <div class="flex justify-center items-center w-full mt-8 mb-4">
+                        <button type="submit" class="w-2/5 bg-blue-600 text-white py-2 rounded-lg hover:opacity-90">
+                            บันทึกการแก้ไข
+                        </button>
+                    </div>
+                
+            </div>
+
+            <!-- Right: Additional Information -->
+            <div class="w-full md:w-1/2">
+                <div class="bg-white rounded-2xl shadow-lg p-8 flex flex-col gap-4">
+                    <div class="mb-4 border border-gray-300 rounded-lg p-4 shadow-sm">
+                        <label class="block text-gray-700 font-semibold mb-2">วันที่เริ่มต้น :</label>
+                        <input type="datetime-local" name="start_datetime" value="{{ booking.start_datetime|date:'Y-m-d\\TH:i' }}" required class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-400">
+                    </div>
+
+                    <div class="mb-4 border border-gray-300 rounded-lg p-4 shadow-sm">
+                        <label class="block text-gray-700 font-semibold mb-2">วันที่สิ้นสุด :</label>
+                        <input type="datetime-local" name="end_datetime" value="{{ booking.end_datetime|date:'Y-m-d\\TH:i' }}" required class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-400">
+                    </div>
+
+                    <div class="mb-4 border border-gray-300 rounded-lg p-4 shadow-sm">
+                        <label class="block text-gray-700 font-semibold mb-2">รายชื่อผู้เข้าประชุม :</label>
+                        <textarea name="n_list" rows="4"
+                            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">{{ booking.n_list }}</textarea>
+                    </div>
+                    
+
+                    <div class="mb-4 border border-gray-300 rounded-lg p-4 shadow-sm">
+                        <label class="block text-gray-700 font-semibold mb-2">รายละเอียดการประชุม :</label>
+                        <textarea name="description" rows="4"
+                            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">{{ booking.description }}</textarea>
+                    </div>
+                        
+                        
+                    
+
+                    
+                </div>
+            </div>
+        </div>
+    </form>
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('main-content');
+
+            sidebar.classList.toggle('active');
+            content.classList.toggle('content-move');
+        }
+    </script>
+
+</body>
+
+</html>

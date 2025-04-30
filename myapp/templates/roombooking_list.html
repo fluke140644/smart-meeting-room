@@ -1,0 +1,287 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบจองห้องประชุม</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+
+
+    <style>
+        .sidebar-transition {
+            transition: all 0.3s;
+        }
+
+        #sidebar {
+            transform: translateX(-100%);
+        }
+
+        #sidebar.active {
+            transform: translateX(0);
+        }
+
+        /* Content move when sidebar active */
+        .content-transition {
+            transition: all 0.3s;
+        }
+
+        .content-move {
+            margin-left: 16rem;
+            /* กว้างเท่า sidebar 64 = 16rem */
+        }
+
+        /*.background-color: #f5f5f5;
+      font-family: 'Tahoma', sans-serif;
+    }*/
+        .content-container {
+            padding: 20px;
+            background-color: white;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+        }
+
+        .status-btn {
+            width: 60px;
+        }
+
+        .table> :not(caption)>*>* {
+            vertical-align: middle;
+        }
+
+        .table-title {
+            margin-bottom: 24px;
+            /* หรือ 2rem, แล้วแต่ความต้องการ */
+        }
+
+        /* พื้นหลังหน้าจอ */
+        body {
+            font-family: 'Sarabun', sans-serif;
+            margin: 16px;
+            animation: gradientBG 15s infinite alternate;
+            background: linear-gradient(-45deg, #4FC3F7, #81C784, #F1F8E9, #607D8B, #F1F8E9);
+            background-size: 400% 400%;
+        }
+
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 80% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <nav
+        class="fixed top-0 left-0 right-0 h-16 bg-gradient-to-r from-green-500 to-blue-500 text-white flex justify-between items-center px-4 shadow z-50">
+        <div class="flex items-center space-x-2">
+            <!-- Hamburger -->
+            <button onclick="toggleSidebar()" class="text-3xl text-white mr-2">&#9776;</button>
+            <!-- Logo & Title -->
+            <a href="/home"><img src="https://sdh.go.th/img/sdh.jpg" class="w-10 h-10 rounded-full" alt="logo"></a>
+            <span class="text-xl font-bold">ระบบจองห้องประชุม</span>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside id="sidebar"
+        class="fixed top-16 left-0 w-64 h-[calc(100%-4rem)] bg-gray-800 text-white p-4 z-40 flex flex-col justify-between">
+        <div>
+            {% if user.is_authenticated %}
+            <!-- User Info -->
+            <div class="flex items-center space-x-3 mb-6 bg-gray-700 p-3 rounded">
+                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-800 text-xl">👤
+                </div>
+                <div>
+                    <div class="font-semibold">ชื่อ: {{ user.get_full_name|default:user.username }}</div>
+                    <div class="text-sm text-gray-300">สถานะ: {{ user.is_staff|yesno:"admin,user" }}</div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- เมนู -->
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-xl font-bold">เมนู</h1>
+                <button onclick="toggleSidebar()" class="text-white text-3xl">&times;</button>
+            </div>
+            <ul class="space-y-2">
+                <li><a href="/home" class="block hover:text-yellow-400 bg-gray-700 p-2 rounded">🏠 Home</a></li>
+                <li><a href="/about"
+                        class="block hover:text-yellow-400 bg-gray-700 p-2 rounded">รายละเอียดห้องประชุม</a></li>
+                <li><a href="/RoomBooking" class="block hover:text-yellow-400 bg-gray-700 p-2 rounded">จองห้องประชุม</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Logout -->
+        <div>
+            <form method="post" action="{% url 'logout' %}" class="mt-6">
+                {% csrf_token %}
+                <button type="submit" class="w-full hover:text-yellow-400 bg-gray-700 p-2 rounded">🚪
+                    ออกจากระบบ</button>
+            </form>
+            <hr class="border-gray-600 my-2">
+            <h4 class="text-sm text-gray-400 text-right">Version 0.0.1</h4>
+        </div>
+    </aside>
+
+
+    <hr class="border-gray-500 mb-4">
+
+
+    <!-- Content -->
+<div class="w-full px-2">
+    <div id="main-content" class="flex flex-wrap gap-4 mt-4 justify-center content-transition">
+  
+      <div class="pt-20 w-full max-w-screen-lg">
+        <div class="content-container w-full">
+  
+          <!-- ปุ่มจองห้อง -->
+          <div class="d-flex justify-content-end mb-2">
+            <a href="{% url 'book_room' %}" class="btn btn-success">จองห้อง</a>
+          </div>
+  
+          <!-- ฟอร์มค้นหา -->
+          <form method="get" class="grid grid-cols-1 md:grid-cols-5 gap-2 mb-4">
+            <div>
+              <label>วันที่ให้ห้อง</label>
+              <input type="date" class="form-control" name="start_date" value="{{ request.GET.start_date }}">
+            </div>
+            <div>
+              <label>ถึง</label>
+              <input type="date" class="form-control" name="end_date" value="{{ request.GET.end_date }}">
+            </div>
+            <div>
+              <label>สถานะ</label>
+              <select class="form-select" name="status">
+                <option value="">===ทุกสถานะ===</option>
+                <option value="approved" {% if selected_status == "approved" %}selected{% endif %}>อนุมัติ</option>
+                <option value="pending" {% if selected_status == "pending" %}selected{% endif %}>รออนุมัติ</option>
+                <option value="cancelled" {% if selected_status == "cancelled" %}selected{% endif %}>ยกเลิก</option>
+              </select>
+            </div>
+            <div>
+              <label>คำค้น</label>
+              <input type="text" class="form-control" placeholder="ชื่อห้อง, เลขที่ใบจอง" name="q"
+                value="{{ request.GET.q }}">
+            </div>
+            <div class="flex items-end">
+              <button type="submit" class="btn btn-primary w-full">ค้นหา</button>
+            </div>
+          </form>
+  
+          <h5 class="mb-3"><strong>รายการจองห้อง</strong></h5>
+  
+          <!-- ตาราง -->
+          <div class="overflow-x-auto">
+            <table id="booking-table" class="table table-bordered w-full text-sm md:text-base">
+              <thead class="table-light">
+                <tr>
+                  <th>สถานะ</th>
+                  <th>รหัสการจอง</th>
+                  <th>วัน/เวลา</th>
+                  <th>ห้องประชุม / หัวข้อ</th>
+                  <th>การดำเนินการ</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for booking in bookings %}
+                <tr>
+                  <td class="align-middle text-center">
+                    {% if booking.status == "approved" %}
+                    <span class="badge bg-success">อนุมัติ</span>
+                    {% elif booking.status == "pending" %}
+                    <span class="badge bg-warning text-dark">รออนุมัติ</span>
+                    {% elif booking.status == "cancelled" %}
+                    <span class="badge bg-danger">ยกเลิก</span>
+                    {% endif %}
+                  </td>
+                  <td class="text-center align-middle">{{ booking.booking_code }}</td>
+                  <td class="text-center align-middle">
+                    {{ booking.start_datetime|date:"d M Y H:i" }}<br>
+                    ถึง {{ booking.end_datetime|date:"d M Y H:i" }}
+                  </td>
+                  <td class="text-center align-middle">
+                    <strong>ชื่อห้องประชุม : {{ booking.room_name }}</strong><br>
+                    หัวข้อ : {{ booking.topic }}
+                  </td>
+                  <td class="text-center align-middle">
+                    <a href="{% url 'booking_detail' booking.id %}" class="btn btn-sm btn-info">แสดง</a>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="5" class="text-center">ไม่มีรายการจอง</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('main-content');
+
+            sidebar.classList.toggle('active');
+            content.classList.toggle('content-move');
+        }
+
+        $(document).ready(function () {
+            $('#booking-table').DataTable({
+                "pageLength": 5,
+                "lengthMenu": [[5, 10, 15, 20, -1], [5, 10, 15, 20, "ทั้งหมด"]],
+                "searching": false,
+                "order": [[1, 'desc']],
+                "language": {
+                    "lengthMenu": "แสดง _MENU_ รายการต่อหน้า",
+                    "zeroRecords": "ไม่พบข้อมูล",
+                    "info": "แสดงหน้า _PAGE_ จาก _PAGES_",
+                    "infoEmpty": "ไม่มีข้อมูลให้แสดง",
+                    "infoFiltered": "(กรองจากทั้งหมด _MAX_ รายการ)",
+                    // "search": "ค้นหา:",
+                    "paginate": {
+                        "first": "หน้าแรก",
+                        "last": "หน้าสุดท้าย",
+                        "next": "ถัดไป",
+                        "previous": "ก่อนหน้า"
+                    }
+                }
+            });
+        });
+
+    </script>
+
+
+</body>
+
+</html>

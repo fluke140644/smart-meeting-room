@@ -1,0 +1,73 @@
+<!-- templates/calendar.html -->
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8">
+  <title>ปฏิทินการจองห้องประชุม</title>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 40px;
+      font-family: 'Sarabun', sans-serif;
+      height: 100vh;
+      animation: gradientBG 15s infinite alternate;
+      background: linear-gradient(-45deg, #4FC3F7, #81C784, #F1F8E9, #607D8B);
+      background-size: 400% 400%;
+    }
+
+    @keyframes gradientBG {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    #calendar {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2 style="text-align:center;">ระบบจองห้องประชุม</h2>
+  <div id="calendar"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales-all.global.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'th',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,listWeek'
+        },
+        events: '/calendar/events/',
+        eventClick: function (info) {
+          alert(
+            'กิจกรรม: ' + info.event.title +
+            '\nห้อง: ' + info.event.extendedProps.room +
+            '\nรายละเอียด: ' + info.event.extendedProps.description
+          );
+        },
+      });
+      calendar.render();
+    });
+  </script>
+</body>
+
+</html>
