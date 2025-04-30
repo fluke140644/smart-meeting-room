@@ -497,49 +497,49 @@
 
         // เช็คว่างลงเวลาห้องซ้ำ
         document.addEventListener('DOMContentLoaded', function () {
-    const startDatetimeInput = document.getElementById('start_datetime');
-    const endDatetimeInput = document.getElementById('end_datetime');
-    const conflictMessage = document.getElementById('conflict-message');  // จะเป็น element ที่ใช้แสดงข้อความว่า "ห้องไม่ว่าง"
+            const startDatetimeInput = document.getElementById('start_datetime');
+            const endDatetimeInput = document.getElementById('end_datetime');
+            const conflictMessage = document.getElementById('conflict-message');  // จะเป็น element ที่ใช้แสดงข้อความว่า "ห้องไม่ว่าง"
 
-    startDatetimeInput.addEventListener('change', checkRoomAvailability);
-    endDatetimeInput.addEventListener('change', checkRoomAvailability);
+            startDatetimeInput.addEventListener('change', checkRoomAvailability);
+            endDatetimeInput.addEventListener('change', checkRoomAvailability);
 
-    function getCsrfToken() {
-        const cookieValue = document.cookie.match(/csrftoken=([\w-]+)/);
-        return cookieValue ? cookieValue[1] : '';
-    }
-
-    function checkRoomAvailability() {
-        const startDatetime = startDatetimeInput.value;
-        const endDatetime = endDatetimeInput.value;
-
-        if (!startDatetime || !endDatetime) {
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append('start_datetime', startDatetime);
-        formData.append('end_datetime', endDatetime);
-        formData.append('room_name', document.getElementById('room_name').value);  // ใช้ค่าชื่อห้องที่กรอกในฟอร์ม
-
-        fetch('/check_room_availability/', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRFToken': getCsrfToken()  // ส่ง CSRF Token ใน header
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.conflict) {
-                conflictMessage.style.display = 'block';
-            } else {
-                conflictMessage.style.display = 'none';
+            function getCsrfToken() {
+                const cookieValue = document.cookie.match(/csrftoken=([\w-]+)/);
+                return cookieValue ? cookieValue[1] : '';
             }
-        })
-        .catch(error => console.error('Error:', error));
-    }
-});
+
+            function checkRoomAvailability() {
+                const startDatetime = startDatetimeInput.value;
+                const endDatetime = endDatetimeInput.value;
+
+                if (!startDatetime || !endDatetime) {
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('start_datetime', startDatetime);
+                formData.append('end_datetime', endDatetime);
+                formData.append('room_name', document.getElementById('room_name').value);  // ใช้ค่าชื่อห้องที่กรอกในฟอร์ม
+
+                fetch('/check_room_availability/', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': getCsrfToken()  // ส่ง CSRF Token ใน header
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.conflict) {
+                            conflictMessage.style.display = 'block';
+                        } else {
+                            conflictMessage.style.display = 'none';
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        });
 
 
 
