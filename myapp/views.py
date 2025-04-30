@@ -471,6 +471,7 @@ def add_equipment(request):
         
         return JsonResponse({'message': 'Equipment added successfully!'})
     else:
+<<<<<<< HEAD
         return JsonResponse({'error': 'Invalid request'}, status=400)
     
 
@@ -493,3 +494,6 @@ def check_room_availability(request):
         return JsonResponse({'conflict': existing_booking})
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
+=======
+        return JsonResponse({'error': 'Invalid request'}, status=400)
+>>>>>>> 60889e62c08c5fa0062e5222bf333229206e6e7f
