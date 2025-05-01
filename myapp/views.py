@@ -1,20 +1,19 @@
-from urllib import request
-from django.shortcuts import render,redirect
-from django.http import HttpResponse
-from myapp.models import Person, Person2, Booking
+from datetime import datetime
+import json
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
 from django.contrib import messages
 from django.db.models import Q
-from django.shortcuts import render, get_object_or_404
-from .models import Booking, Equipment
-from .forms import BookingForm
-from datetime import datetime
+from django.conf import settings
+from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login as auth_login
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404, redirect
-from django.http import JsonResponse, HttpResponseForbidden
-from .models import Holiday
-import json
+from django.contrib.auth.forms import AuthenticationForm
+
+from .models import Person, Person2, Booking, Equipment, Holiday
+from .forms import BookingForm
+
 
 
 # Create your views here.
@@ -342,6 +341,23 @@ def book_room(request):
 
             booking.equipment_list.set(equipment_ids)
 
+            equipment_text = ""
+            if equipment_data:
+                for item in equipment_data:
+                    equipment_text += f"- {item['name']} จำนวน {item['quantity']}\n"
+            else:
+                equipment_text = "ไม่มี"
+
+
+        # ส่งอีเมลยืนยันการจอง
+        send_mail(
+            subject='ยืนยันการจองห้องประชุม',
+            message=f'คุณได้จองห้อง {booking.room_name} \n เวลา {booking.start_datetime} - {booking.end_datetime}\n\nหัวข้อ : {booking.topic}\nแผนก : {booking.dpm_sd}\nชื่อผู้ขอใช้ : {booking.n_req} \nเบอร์ติดต่อ : {booking.n_ph}\nจำนวนผู้เข้าประชุม : {booking.n_count}\nรายชื่อผู้เข้าประชุม : \n{booking.n_list}\nรายละเอียด : {booking.description}\nรายการอุปกรณ์ : \n{equipment_text}\n\nขอบคุณที่ใช้บริการ.',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=['fook165@gmail.com'],
+            fail_silently=False,
+        )
+
         # ส่ง success
         return render(request, 'book_room.html', {
             'success': True,
@@ -421,12 +437,47 @@ def calendar_events(request):
 
 def cancel_booking(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
+
     if request.method == 'POST':
+        # เปลี่ยนสถานะเป็นยกเลิก
         booking.status = 'cancelled'
         booking.save()
-        messages.success(request, "ยกเลิกการจองเรียบร้อยแล้ว")
-    return redirect('roombooking')
 
+        # เตรียมข้อความอุปกรณ์ (ถ้ามี)
+        equipment_text = ""
+        if hasattr(booking, 'equipment_list'):
+            equipment_items = booking.equipment_list.all()
+            if equipment_items:
+                for item in equipment_items:
+                    equipment_text += f"- {item.name} จำนวน {item.quantity}\n"
+            else:
+                equipment_text = "ไม่มี"
+        else:
+            equipment_text = "ไม่มีข้อมูล"
+
+        # ส่งอีเมลแจ้งยกเลิก
+        send_mail(
+            subject='แจ้งยกเลิกการจองห้องประชุม',
+            message=f"""การจองห้องประชุมถูกยกเลิกแล้ว
+
+ห้อง: {booking.room_name}
+เวลา: {booking.start_datetime} - {booking.end_datetime}
+หัวข้อ: {booking.topic}
+ผู้ขอใช้: {booking.n_req}
+แผนก: {booking.dpm_sd}
+
+รายการอุปกรณ์:
+{equipment_text}
+
+ขอบคุณที่แจ้งล่วงหน้า.""",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=['fook165@gmail.com'],  # หรือ booking.user.email ถ้ามี
+            fail_silently=False,
+        )
+
+        messages.success(request, "ยกเลิกการจองเรียบร้อยแล้ว")
+
+    return redirect('roombooking')
 
 def edit_booking(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
