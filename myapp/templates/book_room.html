@@ -102,18 +102,18 @@
 
     <!-- Main Content -->
     <!-- ฟอร์มขอจองห้อง -->
-    <main class="min-h-screen px-4 pt-24 sm:px-6 lg:px-10">
-        <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-700 mb-8">แบบฟอร์มการจองห้อง</h2>
+    <main class="min-h-screen px-2 pt-20 sm:px-4 lg:px-6 text-sm">
+        <h2 class="text-xl sm:text-2xl font-bold text-center text-gray-700 mb-4">แบบฟอร์มการจองห้อง</h2>
 
-        <form id="bookingForm" method="post" class="flex flex-col gap-6 lg:flex-row lg:gap-8">
+        <form id="bookingForm" method="post" class="flex flex-col gap-4 lg:flex-row lg:gap-4">
             {% csrf_token %}
 
             <!-- ฟอร์มด้านซ้าย -->
-            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg w-full lg:w-1/2">
-                <div class="mb-4 border border-gray-300 rounded-lg p-4 shadow-sm">
-                    <label for="room_name" class="block text-gray-700 font-semibold mb-2">ชื่อห้อง :</label>
+            <div class="bg-white p-4 sm:p-5 rounded-xl shadow-md w-full lg:w-1/2">
+                <div class="mb-3 border border-gray-300 rounded-md p-3 shadow-sm">
+                    <label for="room_name" class="block text-gray-700 font-semibold mb-1">ชื่อห้อง :</label>
                     <select id="room_name" name="room_name"
-                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        class="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
                         required>
                         <option value="">-- กรุณาเลือกห้องประชุม --</option>
                         <option value="ห้องประชุมเพรชสมเด็จ">ห้องประชุมเพรชสมเด็จ</option>
@@ -123,265 +123,260 @@
                     </select>
                 </div>
 
-                <div class="mb-4 border border-gray-300 rounded-lg p-4 shadow-sm">
-                    <label for="topic" class="block text-gray-700 font-semibold mb-2">วาระการประชุม :</label>
+                <div class="mb-3 border border-gray-300 rounded-md p-3 shadow-sm">
+                    <label for="topic" class="block text-gray-700 font-semibold mb-1">วาระการประชุม :</label>
                     <input type="text" id="topic" name="topic"
-                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        class="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
                         required placeholder="วาระการประชุม">
                 </div>
 
-                <div class="mb-4 border border-gray-300 rounded-lg p-4 shadow-sm">
-                    <label for="h_pr" class="block text-gray-700 font-semibold mb-2">ประธานการประชุม :</label>
+                <div class="mb-3 border border-gray-300 rounded-md p-3 shadow-sm">
+                    <label for="h_pr" class="block text-gray-700 font-semibold mb-1">ประธานการประชุม :</label>
                     <input type="text" id="h_pr" name="h_pr"
-                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        class="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
                         required placeholder="ประธานการประชุม">
                 </div>
 
-                <div class="mb-4 border border-gray-300 rounded-lg p-4 shadow-sm">
-                    <label for="dpm_sd" class="block text-gray-700 font-semibold mb-2">ใช้สำหรับแผนก :</label>
+                <div class="mb-3 border border-gray-300 rounded-md p-3 shadow-sm">
+                    <label for="dpm_sd" class="block text-gray-700 font-semibold mb-1">ใช้สำหรับแผนก :</label>
                     <select id="dpm_sd" name="dpm_sd"
-                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        class="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
                         required>
                         <option value="">-- กรุณาเลือกแผนก --</option>
                         <option value="เทคโนโลยีสารสนเทศ (IT)">เทคโนโลยีสารสนเทศ (IT)</option>
                         <option value="อุบัติเหตุ-ฉุกเฉิน (ER)">อุบัติเหตุ-ฉุกเฉิน (ER)</option>
                         <option value="ห้องบัตร">ห้องบัตร</option>
-                        <option value="ห้องรังสี">ห้องรังสี</option>
-                        <option value="ห้องคลอด">ห้องคลอด</option>
-                        <option value="ห้องผ่าตัด">ห้องผ่าตัด</option>
-                        <option value="ห้องคุณภาพเเละแผนงาน">ห้องคุณภาพเเละแผนงาน</option>
-                        <option value="งานจิตเวช">งานจิตเวช</option>
-                        <option value="บริหารทั่วไป">บริหารทั่วไป</option>
-                        <option value="พัสดุ">พัสดุ</option>
-                        <option value="เวชระเบียน">เวชระเบียน</option>
-                        <option value="คลินิกโรคเรื้อรัง">คลินิกโรคเรื้อรัง</option>
-                        <option value="คลินิกโรคทางเดินหายใจ">คลินิกโรคทางเดินหายใจ</option>
-                        <option value="แผนไทย">แผนไทย</option>
-                        <option value="ปฐมภูมิ">ปฐมภูมิ</option>
+                        <!-- ย่อรายการให้สั้นลง หรือจัดให้อยู่หลายบรรทัด -->
                     </select>
                 </div>
 
-                <div class="mb-4 border border-gray-300 rounded-lg p-4 shadow-sm">
-                    <label for="n_req" class="block text-gray-700 font-semibold mb-2">ชื่อผู้ขอใช้ :</label>
+                <div class="mb-3 border border-gray-300 rounded-md p-3 shadow-sm">
+                    <label for="n_req" class="block text-gray-700 font-semibold mb-1">ชื่อผู้ขอใช้ :</label>
                     <input type="text" id="n_req" name="n_req"
-                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        class="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
                         required placeholder="ชื่อผู้ขอใช้">
                 </div>
 
-                <div class="mb-4 border border-gray-300 rounded-lg p-4 shadow-sm">
-                    <label for="n_ph" class="block text-gray-700 font-semibold mb-2">เบอร์ติดต่อ :</label>
+                <div class="mb-3 border border-gray-300 rounded-md p-3 shadow-sm">
+                    <label for="n_ph" class="block text-gray-700 font-semibold mb-1">เบอร์ติดต่อ :</label>
                     <input type="text" id="n_ph" name="n_ph"
-                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        class="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
                         required placeholder="เบอร์ติดต่อ">
                 </div>
 
-                <!-- อุปกรณ์ -->
-                <div class="mb-4">
-                    <label class="form-label font-semibold">อุปกรณ์ที่เลือก:</label>
-                    <ul id="equipment_list_display" class="list-group mb-2">
-                        <!-- รายการที่เลือกจะแสดงตรงนี้ -->
+                <div class="mb-3">
+                    <label class="font-semibold">อุปกรณ์ที่เลือก:</label>
+                    <ul id="equipment_list_display" class="mb-2 list-disc ml-5 text-gray-600 text-xs">
+                        <!-- รายการจะแสดงที่นี่ -->
                     </ul>
                     <input type="hidden" name="equipment_list" id="equipment_list">
-                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
-                        data-bs-target="#equipmentModal">
+                    <button type="button"
+                        class="text-xs px-2 py-1 border border-blue-400 text-blue-500 rounded hover:bg-blue-100"
+                        data-bs-toggle="modal" data-bs-target="#equipmentModal">
                         + เพิ่มอุปกรณ์
                     </button>
                 </div>
             </div>
 
             <!-- ฟอร์มด้านขวา -->
-            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg w-full lg:w-1/2">
-                <div class="mb-4 border border-gray-300 rounded-lg p-4 shadow-sm">
-                    <label for="start_datetime" class="block text-gray-700 font-semibold mb-2">วันที่เริ่มต้น :</label>
+            <div class="bg-white p-4 sm:p-5 rounded-xl shadow-md w-full lg:w-1/2">
+                <div class="mb-3 border border-gray-300 rounded-md p-3 shadow-sm">
+                    <label for="start_datetime" class="block text-gray-700 font-semibold mb-1">วันที่เริ่มต้น :</label>
                     <input type="datetime-local" id="start_datetime" name="start_datetime"
-                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        class="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
                         required>
                 </div>
 
-                <div id="conflict-message" style="color: red; display: none;">
+                <div id="conflict-message" class="text-xs text-red-600 mb-2 hidden">
                     ห้องนี้มีการจองแล้วในช่วงเวลาที่คุณเลือก
                 </div>
 
-                <div class="mb-4 border border-gray-300 rounded-lg p-4 shadow-sm">
-                    <label for="end_datetime" class="block text-gray-700 font-semibold mb-2">วันที่สิ้นสุด :</label>
+                <div class="mb-3 border border-gray-300 rounded-md p-3 shadow-sm">
+                    <label for="end_datetime" class="block text-gray-700 font-semibold mb-1">วันที่สิ้นสุด :</label>
                     <input type="datetime-local" id="end_datetime" name="end_datetime"
-                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        class="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
                         required>
                 </div>
 
-                <div class="mb-4 border border-gray-300 rounded-lg p-4 shadow-sm">
-                    <label for="n_count" class="block text-gray-700 font-semibold mb-2">จำนวนผู้เข้าประชุม :</label>
+                <div class="mb-3 border border-gray-300 rounded-md p-3 shadow-sm">
+                    <label for="n_count" class="block text-gray-700 font-semibold mb-1">จำนวนผู้เข้าประชุม :</label>
                     <input type="number" id="n_count" name="n_count"
-                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        class="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
                         required placeholder="จำนวนผู้เข้าประชุม">
                 </div>
 
-                <div class="mb-4 border border-gray-300 rounded-lg p-4 shadow-sm">
-                    <label for="n_list" class="block text-gray-700 font-semibold mb-2">รายชื่อผู้เข้าประชุม :</label>
-                    <textarea id="n_list" name="n_list" rows="4"
-                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                <div class="mb-3 border border-gray-300 rounded-md p-3 shadow-sm">
+                    <label for="n_list" class="block text-gray-700 font-semibold mb-1">รายชื่อผู้เข้าประชุม :</label>
+                    <textarea id="n_list" name="n_list" rows="2"
+                        class="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
                         placeholder="รายชื่อผู้เข้าประชุม"></textarea>
                 </div>
 
-                <div class="mb-4 border border-gray-300 rounded-lg p-4 shadow-sm">
-                    <label for="description" class="block text-gray-700 font-semibold mb-2">รายละเอียดการประชุม
+                <div class="mb-3 border border-gray-300 rounded-md p-3 shadow-sm">
+                    <label for="description" class="block text-gray-700 font-semibold mb-1">รายละเอียดการประชุม
                         :</label>
-                    <textarea id="description" name="description" rows="4"
-                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    <textarea id="description" name="description" rows="2"
+                        class="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
                         placeholder="รายละเอียดการประชุม"></textarea>
                 </div>
-
-
+                <div class="flex justify-center items-center w-full mt-2 mb-6">
+                    <button type="button" onclick="document.getElementById('bookingForm').submit();"
+                        class="w-3/5 bg-success text-white py-2 rounded-lg hover:opacity-90">
+                        จองห้อง
+                    </button>
+                </div>
             </div>
         </form>
+    </main>
 
-        <!-- Modal -->
-        <div class="modal fade" id="equipmentModal" tabindex="-1" aria-labelledby="equipmentModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header bg-primary text-white">
-                        <h5 class="modal-title" id="equipmentModalLabel">เลือกอุปกรณ์ห้องประชุม</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="ปิด"></button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="text" class="form-control mb-3" id="searchEquipment" onkeyup="filterEquipment()"
-                            placeholder="ค้นหาอุปกรณ์...">
 
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th></th>
-                                        <th>ชื่ออุปกรณ์</th>
-                                        <th>คงเหลือ</th>
-                                        <th>หน่วย</th>
-                                        <th>รายละเอียด</th>
-                                        <th>จำนวน</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="equipmentTable">
-                                    <tr>
-                                        <td><input type="checkbox" class="form-check-input equipment-checkbox"
-                                                value="จัดแบบ ตัว U"></td>
-                                        <td>จัดแบบ ตัว U</td>
-                                        <td>*</td>
-                                        <td>-</td>
-                                        <td>รูปแบบมาตรฐาน</td>
-                                        <td><input type="number" class="form-control form-control-sm quantity-input"
-                                                min="1" value="1"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox" class="form-check-input equipment-checkbox"
-                                                value="จัดแบบ โต็ะบรรยาย เก้าอี้เรียงหน้ากระดาน"></td>
-                                        <td>จัดแบบ โต็ะบรรยาย เก้าอี้เรียงหน้ากระดาน</td>
-                                        <td>*</td>
-                                        <td>-</td>
-                                        <td>เหมาะสำหรับ ฟังบรรยาย</td>
-                                        <td><input type="number" class="form-control form-control-sm quantity-input"
-                                                min="1" value="1"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox" class="form-check-input equipment-checkbox"
-                                                value="จัดแบบ โต๊ะ+เก้าอี้ เรียงเต็มพื้นที่"></td>
-                                        <td>จัดแบบ โต๊ะ+เก้าอี้ เรียงเต็มพื้นที่</td>
-                                        <td>*</td>
-                                        <td>-</td>
-                                        <td>เหมาะสำหรับ ประชุม/จดบันทึก/ชม วีดีทัศน์</td>
-                                        <td><input type="number" class="form-control form-control-sm quantity-input"
-                                                min="1" value="1"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox" class="form-check-input equipment-checkbox"
-                                                value="จัดแบบ ไม่ใช้เก้าอี้ ห้องโล่ง"></td>
-                                        <td>จัดแบบ ไม่ใช้เก้าอี้ ห้องโล่ง</td>
-                                        <td>*</td>
-                                        <td>-</td>
-                                        <td>รูปแบบพื้นที่โล่ง เหมาะสำหรับทำกิจกรรมกลุ่ม</td>
-                                        <td><input type="number" class="form-control form-control-sm quantity-input"
-                                                min="1" value="1"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox" class="form-check-input equipment-checkbox"
-                                                value="ชุดเครื่องเสียง"></td>
-                                        <td>ชุดเครื่องเสียง</td>
-                                        <td>*</td>
-                                        <td>-</td>
-                                        <td>ติดตั้งที่ห้องประชุม ไม่สามารถเคลื่อนย้ายได้</td>
-                                        <td><input type="number" class="form-control form-control-sm quantity-input"
-                                                min="1" value="1"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox" class="form-check-input equipment-checkbox"
-                                                value="ชุดเครื่องเสียง ออกหน่วย"></td>
-                                        <td>ชุดเครื่องเสียง ออกหน่วย</td>
-                                        <td>*</td>
-                                        <td>-</td>
-                                        <td>เหมาะสำหรับการเคลื่อนย้าย ออกหน่วย</td>
-                                        <td><input type="number" class="form-control form-control-sm quantity-input"
-                                                min="1" value="1"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox" class="form-check-input equipment-checkbox"
-                                                value="เครื่องฉายภาพ 3 มิติ"></td>
-                                        <td>เครื่องฉายภาพ 3 มิติ</td>
-                                        <td>*</td>
-                                        <td>-</td>
-                                        <td>เหมาะสำหรับงานนำเสนอ งานผ่านเอกสาร การเขียนเส้น สี</td>
-                                        <td><input type="number" class="form-control form-control-sm quantity-input"
-                                                min="1" value="1"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox" class="form-check-input equipment-checkbox"
-                                                value="โน๊ตบุ๊ค"></td>
-                                        <td>โน๊ตบุ๊ค</td>
-                                        <td>*</td>
-                                        <td>-</td>
-                                        <td>ใช้สำหรับงานนำเสนอ สามารถพกพา ออกหน่วยบริการ ประชุม</td>
-                                        <td><input type="number" class="form-control form-control-sm quantity-input"
-                                                min="1" value="1"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox" class="form-check-input equipment-checkbox"
-                                                value="โปรเจ็คเตอร์"></td>
-                                        <td>โปรเจ็คเตอร์</td>
-                                        <td>*</td>
-                                        <td>-</td>
-                                        <td>ติดตั้งที่เพดาน ไม่สามารถเคลื่อนย้ายได้</td>
-                                        <td><input type="number" class="form-control form-control-sm quantity-input"
-                                                min="1" value="1"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="checkbox" class="form-check-input equipment-checkbox"
-                                                value="โปรเจ็คเตอร์ + จอ ออกหน่วย"></td>
-                                        <td>โปรเจ็คเตอร์ + จอ ออกหน่วย</td>
-                                        <td>*</td>
-                                        <td>-</td>
-                                        <td>สำหรับพกพา เคลื่อนย้ายได้</td>
-                                        <td><input type="number" class="form-control form-control-sm quantity-input"
-                                                min="1" value="1"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+    <!-- Modal -->
+    <div class="modal fade" id="equipmentModal" tabindex="-1" aria-labelledby="equipmentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="equipmentModalLabel">เลือกอุปกรณ์ห้องประชุม</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="ปิด"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control mb-3" id="searchEquipment" onkeyup="filterEquipment()"
+                        placeholder="ค้นหาอุปกรณ์...">
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th></th>
+                                    <th>ชื่ออุปกรณ์</th>
+                                    <th>คงเหลือ</th>
+                                    <th>หน่วย</th>
+                                    <th>รายละเอียด</th>
+                                    <th>จำนวน</th>
+                                </tr>
+                            </thead>
+                            <tbody id="equipmentTable">
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input equipment-checkbox"
+                                            value="จัดแบบ ตัว U"></td>
+                                    <td>จัดแบบ ตัว U</td>
+                                    <td>*</td>
+                                    <td>-</td>
+                                    <td>รูปแบบมาตรฐาน</td>
+                                    <td><input type="number" class="form-control form-control-sm quantity-input" min="1"
+                                            value="1"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input equipment-checkbox"
+                                            value="จัดแบบ โต็ะบรรยาย เก้าอี้เรียงหน้ากระดาน"></td>
+                                    <td>จัดแบบ โต็ะบรรยาย เก้าอี้เรียงหน้ากระดาน</td>
+                                    <td>*</td>
+                                    <td>-</td>
+                                    <td>เหมาะสำหรับ ฟังบรรยาย</td>
+                                    <td><input type="number" class="form-control form-control-sm quantity-input" min="1"
+                                            value="1"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input equipment-checkbox"
+                                            value="จัดแบบ โต๊ะ+เก้าอี้ เรียงเต็มพื้นที่"></td>
+                                    <td>จัดแบบ โต๊ะ+เก้าอี้ เรียงเต็มพื้นที่</td>
+                                    <td>*</td>
+                                    <td>-</td>
+                                    <td>เหมาะสำหรับ ประชุม/จดบันทึก/ชม วีดีทัศน์</td>
+                                    <td><input type="number" class="form-control form-control-sm quantity-input" min="1"
+                                            value="1"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input equipment-checkbox"
+                                            value="จัดแบบ ไม่ใช้เก้าอี้ ห้องโล่ง"></td>
+                                    <td>จัดแบบ ไม่ใช้เก้าอี้ ห้องโล่ง</td>
+                                    <td>*</td>
+                                    <td>-</td>
+                                    <td>รูปแบบพื้นที่โล่ง เหมาะสำหรับทำกิจกรรมกลุ่ม</td>
+                                    <td><input type="number" class="form-control form-control-sm quantity-input" min="1"
+                                            value="1"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input equipment-checkbox"
+                                            value="ชุดเครื่องเสียง"></td>
+                                    <td>ชุดเครื่องเสียง</td>
+                                    <td>*</td>
+                                    <td>-</td>
+                                    <td>ติดตั้งที่ห้องประชุม ไม่สามารถเคลื่อนย้ายได้</td>
+                                    <td><input type="number" class="form-control form-control-sm quantity-input" min="1"
+                                            value="1"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input equipment-checkbox"
+                                            value="ชุดเครื่องเสียง ออกหน่วย"></td>
+                                    <td>ชุดเครื่องเสียง ออกหน่วย</td>
+                                    <td>*</td>
+                                    <td>-</td>
+                                    <td>เหมาะสำหรับการเคลื่อนย้าย ออกหน่วย</td>
+                                    <td><input type="number" class="form-control form-control-sm quantity-input" min="1"
+                                            value="1"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input equipment-checkbox"
+                                            value="เครื่องฉายภาพ 3 มิติ"></td>
+                                    <td>เครื่องฉายภาพ 3 มิติ</td>
+                                    <td>*</td>
+                                    <td>-</td>
+                                    <td>เหมาะสำหรับงานนำเสนอ งานผ่านเอกสาร การเขียนเส้น สี</td>
+                                    <td><input type="number" class="form-control form-control-sm quantity-input" min="1"
+                                            value="1"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input equipment-checkbox"
+                                            value="โน๊ตบุ๊ค"></td>
+                                    <td>โน๊ตบุ๊ค</td>
+                                    <td>*</td>
+                                    <td>-</td>
+                                    <td>ใช้สำหรับงานนำเสนอ สามารถพกพา ออกหน่วยบริการ ประชุม</td>
+                                    <td><input type="number" class="form-control form-control-sm quantity-input" min="1"
+                                            value="1"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input equipment-checkbox"
+                                            value="โปรเจ็คเตอร์"></td>
+                                    <td>โปรเจ็คเตอร์</td>
+                                    <td>*</td>
+                                    <td>-</td>
+                                    <td>ติดตั้งที่เพดาน ไม่สามารถเคลื่อนย้ายได้</td>
+                                    <td><input type="number" class="form-control form-control-sm quantity-input" min="1"
+                                            value="1"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input equipment-checkbox"
+                                            value="โปรเจ็คเตอร์ + จอ ออกหน่วย"></td>
+                                    <td>โปรเจ็คเตอร์ + จอ ออกหน่วย</td>
+                                    <td>*</td>
+                                    <td>-</td>
+                                    <td>สำหรับพกพา เคลื่อนย้ายได้</td>
+                                    <td><input type="number" class="form-control form-control-sm quantity-input" min="1"
+                                            value="1"></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="modal-footer">
-                        <button onclick="addSelectedEquipment()" type="button"
-                            class="btn btn-primary">เพิ่มอุปกรณ์ที่เลือก</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="addSelectedEquipment()" type="button"
+                        class="btn btn-primary">เพิ่มอุปกรณ์ที่เลือก</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
                 </div>
             </div>
         </div>
+    </div>
+
     </main>
 
     <!-- ปุ่ม submit กลางล่างของทั้งสอง column -->
-    <div class="flex justify-center items-center w-full mt-8 mb-20">
+    <!-- <div class="flex justify-center items-center w-full mt-2 mb-6">
         <button type="button" onclick="document.getElementById('bookingForm').submit();"
             class="w-2/5 bg-success text-white py-2 rounded-lg hover:opacity-90">
             จองห้อง
         </button>
-    </div>
+    </div> -->
 
 
     {% if conflict %}
