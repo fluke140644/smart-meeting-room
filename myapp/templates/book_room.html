@@ -11,6 +11,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
 
 
 
@@ -42,6 +43,24 @@
         .was-validated input:invalid {
             border: 2px solid red;
             background-color: #ffe5e5;
+        }
+
+        .choices__inner {
+            background-color: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 16px;
+        }
+
+        .choices__list--dropdown .choices__item {
+            padding: 10px;
+            font-size: 15px;
+        }
+
+        .choices__list--dropdown .choices__item--selectable.is-highlighted {
+            background-color: #e0f2fe;
+            color: #1e40af;
         }
     </style>
 </head>
@@ -141,14 +160,39 @@
 
                 <div class="mb-3 border border-gray-300 rounded-md p-3 shadow-sm">
                     <label for="dpm_sd" class="block text-gray-700 font-semibold mb-1">ใช้สำหรับแผนก :</label>
-                    <select id="dpm_sd" name="dpm_sd"
+                    <select id="dpm_sd" class="custom-choices" name="dpm_sd"
                         class="w-full border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
                         required>
                         <option value="">-- กรุณาเลือกแผนก --</option>
-                        <option value="เทคโนโลยีสารสนเทศ (IT)">เทคโนโลยีสารสนเทศ (IT)</option>
-                        <option value="อุบัติเหตุ-ฉุกเฉิน (ER)">อุบัติเหตุ-ฉุกเฉิน (ER)</option>
-                        <option value="ห้องบัตร">ห้องบัตร</option>
-                        <!-- ย่อรายการให้สั้นลง หรือจัดให้อยู่หลายบรรทัด -->
+                        <option value="ผู้ป่วยนอก OPD">ผู้ป่วยนอก OPD</option>
+                        <option value="ผู้ป่วยใน IPD (ช)">ผู้ป่วยใน IPD (ช)</option>
+                        <option value="ผู้ป่วยใน IPD (ญ)">ผู้ป่วยใน IPD (ญ)</option>
+                        <option value="ผู้ป่วยนอก OPD">ผู้ป่วยนอก OPD</option>
+                        <option value="ผู้ป่วยตึกพิเศษ Private Room">ผู้ป่วยตึกพิเศษ Private Room</option>
+                        <option value="ผู้ป่วยเด็กและหลังคลอด PP">ผู้ป่วยเด็กและหลังคลอด PP</option>
+                        <option value="ผู้ป่วยผ่าตัดและวิสัญญี OR">ผู้ป่วยผ่าตัดและวิสัญญี OR</option>
+                        <option value="ผู้คลอด LR">ผู้คลอด LR</option>
+                        <option value="ควบคุมการติดเชื้อและงานจ่ายกลาง">ควบคุมการติดเชื้อและงานจ่ายกลาง</option>
+                        <option value="เวชกรรมฟื้นฟู">งานนรีเวช</option>
+                        <option value="แพทย์แผนไทยและแพทย์ทางเลือก">แพทย์แผนไทยและแพทย์ทางเลือก</option>
+                        <option value="งานทันตกรรม">งานทันตกรรม</option>
+                        <option value="งานการเงินและบัญชี">งานการเงินและบัญชี</option>
+                        <option value="งานเกษตรพื้นฐาน">งานเกษตรพื้นฐาน</option>
+                        <option value="งานความสะอาด">งานความสะอาด</option>
+                        <option value="งานซ่อมบำรุง">งานซ่อมบำรุง</option>
+                        <option value="งานธุรการ">งานธุรการ</option>
+                        <option value="งานพัสดุ">งานพัสดุ</option>
+                        <option value="งานยานพาหนะ">งานยานพาหนะ</option>
+                        <option value="งานรักษาความปลอดภัย">งานรักษาความปลอดภัย</option>
+                        <option value="เทคโนโลยีสารสนเทศ IT">เทคโนโลยีสารสนเทศ IT</option>
+                        <option value="เทคนิคการแพทย์">เทคนิคการแพทย์</option>
+                        <option value="บริการด้านปฐมภูมิและองค์รวม">บริการด้านปฐมภูมิและองค์รวม</option>
+                        <option value="กลุ่มงานจิตเวชและยาเสพติด">กลุ่มงานจิตเวชและยาเสพติด</option>
+                        <option value="กลุ่มงานโภชนศาสตร์">กลุ่มงานโภชนศาสตร์</option>
+                        <option value="กลุ่มงานประกันสุขภาพ">กลุ่มงานประกันสุขภาพ</option>
+                        <option value="เภสัชกรรมและคุ้มครองผู้บริโภค">เภสัชกรรมและคุ้มครองผู้บริโภค</option>
+                        <option value="กลุ่มงานรังสีวิทยา">กลุ่มงานรังสีวิทยา</option>
+
                     </select>
                 </div>
 
@@ -372,14 +416,6 @@
 
     </main>
 
-    <!-- ปุ่ม submit กลางล่างของทั้งสอง column -->
-    <!-- <div class="flex justify-center items-center w-full mt-2 mb-6">
-        <button type="button" onclick="document.getElementById('bookingForm').submit();"
-            class="w-2/5 bg-success text-white py-2 rounded-lg hover:opacity-90">
-            จองห้อง
-        </button>
-    </div> -->
-
 
     {% if conflict %}
     <script>
@@ -538,8 +574,16 @@
             }
         });
 
+    </script>
 
-
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script>
+        const dpmSelect = document.getElementById('dpm_sd');
+        const choices = new Choices(dpmSelect, {
+            searchEnabled: true,
+            itemSelectText: '',
+            shouldSort: false
+        });
     </script>
 
 </body>

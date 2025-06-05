@@ -10,7 +10,7 @@ from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
 from .models import Person, Booking, Equipment, Holiday
 from .forms import BookingForm
-
+import threading
 
 
 # Create your views here.
@@ -295,6 +295,8 @@ def book_room(request):
         )
         booking.save()
 
+        equipment_text = "ไม่มี"
+
         
         if equipment_list_json:
             equipment_data = json.loads(equipment_list_json)  
@@ -316,22 +318,25 @@ def book_room(request):
 
             booking.equipment_list.set(equipment_ids)
 
-            equipment_text = ""
+            
             if equipment_data:
+                equipment_text = ""
                 for item in equipment_data:
                     equipment_text += f"- {item['name']} จำนวน {item['quantity']}\n"
             else:
                 equipment_text = "ไม่มี"
 
+        threading.Thread(target=send_email_async, args=(booking, equipment_text)).start()
+
 
         # ส่งอีเมลยืนยันการจอง
-        send_mail(
-            subject='ยืนยันการจองห้องประชุม',
-            message=f'คุณได้จองห้อง {booking.room_name} \n เวลา {booking.start_datetime} - {booking.end_datetime}\n\nหัวข้อ : {booking.topic}\nแผนก : {booking.dpm_sd}\nชื่อผู้ขอใช้ : {booking.n_req} \nเบอร์ติดต่อ : {booking.n_ph}\nจำนวนผู้เข้าประชุม : {booking.n_count}\nรายชื่อผู้เข้าประชุม : \n{booking.n_list}\nรายละเอียด : {booking.description}\nรายการอุปกรณ์ : \n{equipment_text}\n',
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=['fook165@gmail.com','nnasuxinthr@gmail.com'],
-            fail_silently=False,
-        )
+        # send_mail(
+        #     subject='ยืนยันการจองห้องประชุม',
+        #     message=f'คุณได้จองห้อง {booking.room_name} \n เวลา {booking.start_datetime} - {booking.end_datetime}\n\nหัวข้อ : {booking.topic}\nแผนก : {booking.dpm_sd}\nชื่อผู้ขอใช้ : {booking.n_req} \nเบอร์ติดต่อ : {booking.n_ph}\nจำนวนผู้เข้าประชุม : {booking.n_count}\nรายชื่อผู้เข้าประชุม : \n{booking.n_list}\nรายละเอียด : {booking.description}\nรายการอุปกรณ์ : \n{equipment_text}\n',
+        #     from_email=settings.DEFAULT_FROM_EMAIL,
+        #     recipient_list=['fook165@gmail.com','nnasuxinthr@gmail.com'],
+        #     fail_silently=False,
+        # )
 
         # ส่ง success
         return render(request, 'book_room.html', {
@@ -350,6 +355,18 @@ def book_room(request):
         })
 
     return render(request, 'book_room.html')
+
+def send_email_async(booking, equipment_text):
+    try:
+        send_mail(
+            subject='ยืนยันการจองห้องประชุม',
+            message=f'คุณได้จองห้อง {booking.room_name} \n เวลา {booking.start_datetime} - {booking.end_datetime}\n\nหัวข้อ : {booking.topic}\nแผนก : {booking.dpm_sd}\nชื่อผู้ขอใช้ : {booking.n_req} \nเบอร์ติดต่อ : {booking.n_ph}\nจำนวนผู้เข้าประชุม : {booking.n_count}\nรายชื่อผู้เข้าประชุม : \n{booking.n_list}\nรายละเอียด : {booking.description}\nรายการอุปกรณ์ : \n{equipment_text}\n',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=['fook165@gmail.com','nnasuxinthr@gmail.com'],
+            fail_silently=True,
+        )
+    except Exception as e:
+        print("Email send failed:", e)
 
 
 @login_required

@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-xug1i+ovuju*$6lxxtqubf6r07k_ff!i6b9zsk%qyx+p_fs5+a
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '172.30.10.169', 'https://04dd-49-228-178-104.ngrok-free.app']
+ALLOWED_HOSTS = []
 # smart-meeting-room.onrender.com
 # localhost', '127.0.0.1', '172.30.10.169', 'https://04dd-49-228-178-104.ngrok-free.app
 # Application definition
@@ -117,7 +117,8 @@ TIME_ZONE = 'Asia/Bangkok'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
+
 
 
 # Static files (CSS, JavaScript, Images)
@@ -139,7 +140,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Redirect URLS after login/logout
+
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
@@ -149,19 +150,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'fluke898919@gmail.com'
-EMAIL_HOST_PASSWORD = 'kreq mvju jerk loap'  # ต้องใช้ App Password
-
-
-
-
-# Secure
-# SECURE_BROWSER_XSS_FILTER = True
-# SECURE_CONTENT_TYPE_NOSNIFF = True
-# X_FRAME_OPTIONS = 'DENY'
-# SECURE_HSTS_SECONDS = 31536000  # บังคับ browser ให้ใช้ HTTPS ตลอด
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-# SECURE_HSTS_PRELOAD = True
-
-# SECURE_SSL_REDIRECT = False   # Redirect http → https อัตโนมัติ
-# SESSION_COOKIE_SECURE = True  # เก็บ session ผ่าน HTTPS เท่านั้น
-# CSRF_COOKIE_SECURE = True     # ป้องกัน CSRF ผ่าน HTTPS เท่านั้น
+EMAIL_HOST_PASSWORD = 'bsxj rojj ukcd ogjj' 
+EMAIL_TIMEOUT = 60 
