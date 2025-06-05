@@ -24,8 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-xug1i+ovuju*$6lxxtqubf6r07k_ff!i6b9zsk%qyx+p_fs5+a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-ALLOWED_HOSTS = ['smart-meeting-room.onrender.com']
+DEBUG = True
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '172.30.10.169', 'https://04dd-49-228-178-104.ngrok-free.app']
 # smart-meeting-room.onrender.com
 # localhost', '127.0.0.1', '172.30.10.169', 'https://04dd-49-228-178-104.ngrok-free.app
 # Application definition

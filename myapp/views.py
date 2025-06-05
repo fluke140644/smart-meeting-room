@@ -1,17 +1,14 @@
 from datetime import datetime
 import json
-
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
+from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.db.models import Q
 from django.conf import settings
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
-
-from .models import Person, Person2, Booking, Equipment, Holiday
+from .models import Person, Booking, Equipment, Holiday
 from .forms import BookingForm
 
 
@@ -44,8 +41,8 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         
         if user is not None:
-            auth_login(request, user)  # ใช้ alias 'auth_login' แทน 'login'
-            return redirect('home')  # หรือเปลี่ยน path ตามที่คุณต้องการ
+            auth_login(request, user)
+            return redirect('/')
         else:
             return render(request, 'login.html', {'error': 'Invalid credentials'})
     
@@ -113,28 +110,7 @@ def delete(request,person_id):
     messages.success(request,"ลบข้อมูลเรียบร้อย")
     return redirect("/test1")
 
-#P" ADMIN DISABLE
-@login_required
-def adminBE(request):
-    return render(request,"admin.html")
 
-#Test 1
-
-def test1(request):
-    all_Person = Person.objects.all()#.order_by('name')  # จัดเรียงตามชื่อ
-    all_Person2 = Person2.objects.all()#.order_by('name')
-
-    return render(request,"test1.html",{
-    "all_person": all_Person,
-    "all_Person2}":all_Person2
-    })
-
-#TEST2
-@login_required
-def test2(request):
-    return render(request,"test2.html")
-
-#Base
 @login_required
 def base(request):
     return render(request,"base.html")
@@ -142,7 +118,7 @@ def base(request):
 #-------------------------------------------------
 @login_required
 def booking_list(request):
-    bookings = Booking.objects.all()  # เปลี่ยนจาก RoomBooking เป็น Booking
+    bookings = Booking.objects.all()  
 
     start_date = request.GET.get('start_date')
     end_date = request.GET.get('end_date')
@@ -171,10 +147,9 @@ def booking_list(request):
 def booking_detail(request, id):
     booking = Booking.objects.get(id=id)
 
-    # ตรวจสอบว่า equipment_list เป็น ManyToManyField หรือไม่
     equipment_data = []
-    if booking.equipment_list.exists():  # เช็คว่าอุปกรณ์มีการเลือกหรือไม่
-        equipment_data = booking.equipment_list.all()  # ดึงข้อมูลอุปกรณ์ทั้งหมด
+    if booking.equipment_list.exists():
+        equipment_data = booking.equipment_list.all() 
 
     return render(request, 'booking_detail.html', {
         'booking': booking,
@@ -210,7 +185,7 @@ def roombooking_view(request):
 
     context = {
         'bookings': bookings,
-        'selected_status': status,  # ส่งกลับไปเพื่อใช้กับ <select>
+        'selected_status': status, 
     }
     return render(request, 'roombooking_list.html', context)
 
@@ -218,7 +193,7 @@ def roombooking_view(request):
 
 @login_required
 def room_booking_list(request):
-    bookings = Booking.objects.all()  # เปลี่ยนจาก RoomBooking เป็น Booking
+    bookings = Booking.objects.all()  
 
     start_date = request.GET.get('start_date')
     end_date = request.GET.get('end_date')
@@ -260,9 +235,9 @@ def book_room(request):
         n_count = request.POST['n_count']
         n_list = request.POST['n_list']
         dpm_sd = request.POST['dpm_sd']
-        equipment_list_json = request.POST.get('equipment_list')  # <<< ตรงนี้
+        equipment_list_json = request.POST.get('equipment_list')  
 
-        # ตรวจสอบ start และ end
+        
         if not start_datetime or not end_datetime:
             messages.error(request, "กรุณาระบุวันและเวลาเริ่มต้น/สิ้นสุดให้ครบถ้วน")
             return render(request, 'book_room.html', {
@@ -280,7 +255,7 @@ def book_room(request):
         start_datetime_obj = datetime.strptime(start_datetime, '%Y-%m-%dT%H:%M')
         end_datetime_obj = datetime.strptime(end_datetime, '%Y-%m-%dT%H:%M')
 
-        # ตรวจสอบการจองซ้ำ
+        
         existing_booking = Booking.objects.filter(
             room_name=room_name,
             start_datetime__lt=end_datetime_obj,
@@ -320,9 +295,9 @@ def book_room(request):
         )
         booking.save()
 
-        # 🔥 แปลง JSON แล้วเซ็ตอุปกรณ์
+        
         if equipment_list_json:
-            equipment_data = json.loads(equipment_list_json)  # แปลงจาก string เป็น list
+            equipment_data = json.loads(equipment_list_json)  
             equipment_ids = []
 
             for item in equipment_data:
@@ -333,7 +308,7 @@ def book_room(request):
                 equipment_obj, created = Equipment.objects.get_or_create(name=name, defaults={'quantity': quantity})
 
                 if not created:
-                    # ถ้าอุปกรณ์มีอยู่แล้ว อาจอัปเดต quantity ตามที่ผู้ใช้เลือก (optional)
+                
                     equipment_obj.quantity = quantity
                     equipment_obj.save()
 
@@ -352,9 +327,9 @@ def book_room(request):
         # ส่งอีเมลยืนยันการจอง
         send_mail(
             subject='ยืนยันการจองห้องประชุม',
-            message=f'คุณได้จองห้อง {booking.room_name} \n เวลา {booking.start_datetime} - {booking.end_datetime}\n\nหัวข้อ : {booking.topic}\nแผนก : {booking.dpm_sd}\nชื่อผู้ขอใช้ : {booking.n_req} \nเบอร์ติดต่อ : {booking.n_ph}\nจำนวนผู้เข้าประชุม : {booking.n_count}\nรายชื่อผู้เข้าประชุม : \n{booking.n_list}\nรายละเอียด : {booking.description}\nรายการอุปกรณ์ : \n{equipment_text}\n\nขอบคุณที่ใช้บริการ.',
+            message=f'คุณได้จองห้อง {booking.room_name} \n เวลา {booking.start_datetime} - {booking.end_datetime}\n\nหัวข้อ : {booking.topic}\nแผนก : {booking.dpm_sd}\nชื่อผู้ขอใช้ : {booking.n_req} \nเบอร์ติดต่อ : {booking.n_ph}\nจำนวนผู้เข้าประชุม : {booking.n_count}\nรายชื่อผู้เข้าประชุม : \n{booking.n_list}\nรายละเอียด : {booking.description}\nรายการอุปกรณ์ : \n{equipment_text}\n',
             from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=['fook165@gmail.com'],
+            recipient_list=['fook165@gmail.com','nnasuxinthr@gmail.com'],
             fail_silently=False,
         )
 
@@ -412,8 +387,6 @@ def get_room_color(roomColor):
 # ปฏิทิน
 # @login_required
 def calendar_events(request):
-    # if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
-    #     return HttpResponseForbidden("Forbidden")
     bookings = Booking.objects.filter(status='approved')  # แสดงเฉพาะที่อนุมัติแล้ว
     events = []
     for booking in bookings:

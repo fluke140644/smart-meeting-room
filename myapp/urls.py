@@ -9,29 +9,19 @@ urlpatterns = [
     path('',views.index),
     path('about',views.about),
     path('form',views.form),
-    path('adminBE',views.adminBE),
-    path('test1',views.test1),
-    path('test2',views.test2),
     path('base',views.base),
     path('edit/<person_id>',views.edit),
     path('delete/<person_id>',views.delete),
-
     path('home/', views.home, name='home'),
-    
-    
     path('login/', views.login_view, name='login'),
     path('profile/', views.profile, name='profile'),
-    # path('login/', views.login_view, name='login'),
-    
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
-
     path('bookings/', views.booking_list, name='booking_list'),  
     path('RoomBooking', views.roombooking_view, name='roombooking'),# ✅ ใช้ชื่อใหม่
     path('bookings/<int:id>/', views.booking_detail, name='booking_detail'), # สำหรับปุ่ม "แสดง" 
     path('book-room/', views.book_room, name='book_room'),
     path('create/', views.booking_create_view, name='booking_create'),
     path('booking/new/', views.booking_create_view, name='booking_create'),  # หากใช้ form แบบ ModelForm
-
     path('secret/', views.secret_view),
 
     # -----------------------------------------------

@@ -6,5 +6,4 @@ class MyappConfig(AppConfig):
     name = 'myapp'
 
 def ready(self):
-        # หลีกเลี่ยงการทำ database query ที่นี่
         pass
