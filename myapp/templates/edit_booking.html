@@ -135,21 +135,35 @@
                         <label class="block text-gray-700 font-semibold mb-2">ใช้สำหรับแผนก :</label>
                         <select name="dpm_sd" required class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-400">
                             <option value="">-- กรุณาเลือกแผนก --</option>
-                            <option value="เทคโนโลยีสารสนเทศ (IT)" {% if booking.dpm_sd == "เทคโนโลยีสารสนเทศ (IT)" %}selected{% endif %}>เทคโนโลยีสารสนเทศ (IT)</option>
-                            <option value="อุบัติเหตุ-ฉุกเฉิน (ER)" {% if booking.dpm_sd == "อุบัติเหตุ-ฉุกเฉิน (ER)" %}selected{% endif %}>อุบัติเหตุ-ฉุกเฉิน (ER)</option>
-                            <option value="ห้องบัตร" {% if booking.dpm_sd == "ห้องบัตร" %}selected{% endif %}>ห้องบัตร</option>
-                            <option value="ห้องรังสี" {% if booking.dpm_sd == "ห้องรังสี" %}selected{% endif %}>ห้องรังสี</option>
-                            <option value="ห้องคลอด" {% if booking.dpm_sd == "ห้องคลอด" %}selected{% endif %}>ห้องคลอด</option>
-                            <option value="ห้องผ่าตัด" {% if booking.dpm_sd == "ห้องผ่าตัด" %}selected{% endif %}>ห้องผ่าตัด</option>
-                            <option value="ห้องคุณภาพเเละแผนงาน" {% if booking.dpm_sd == "ห้องคุณภาพเเละแผนงาน" %}selected{% endif %}>ห้องคุณภาพเเละแผนงาน</option>
-                            <option value="งานจิตเวช" {% if booking.dpm_sd == "งานจิตเวช" %}selected{% endif %}>งานจิตเวช</option>
-                            <option value="บริหารทั่วไป" {% if booking.dpm_sd == "บริหารทั่วไป" %}selected{% endif %}>บริหารทั่วไป</option>
-                            <option value="พัสดุ" {% if booking.dpm_sd == "พัสดุ" %}selected{% endif %}>พัสดุ</option>
-                            <option value="เวชระเบียน" {% if booking.dpm_sd == "เวชระเบียน" %}selected{% endif %}>เวชระเบียน</option>
-                            <option value="คลินิกโรคเรื้อรัง" {% if booking.dpm_sd == "คลินิกโรคเรื้อรัง" %}selected{% endif %}>คลินิกโรคเรื้อรัง</option>
-                            <option value="คลินิกโรคทางเดินหายใจ" {% if booking.dpm_sd == "คลินิกโรคทางเดินหายใจ" %}selected{% endif %}>คลินิกโรคทางเดินหายใจ</option>
-                            <option value="แผนไทย" {% if booking.dpm_sd == "แผนไทย" %}selected{% endif %}>แผนไทย</option>
-                            <option value="ปฐมภูมิ" {% if booking.dpm_sd == "ปฐมภูมิ" %}selected{% endif %}>ปฐมภูมิ</option>
+                            <option value="ผู้ป่วยนอก OPD" {% if booking.dpm_sd == "ผู้ป่วยนอก OPD" %}selected{% endif %}>ผู้ป่วยนอก OPD</option>
+                            <option value="ผู้ป่วยใน IPD (ช)" {% if booking.dpm_sd == "ผู้ป่วยใน IPD (ช)" %}selected{% endif %}>ผู้ป่วยใน IPD (ช)</option>
+                            <option value="ผู้ป่วยใน IPD (ญ)" {% if booking.dpm_sd == "ผู้ป่วยใน IPD (ญ)" %}selected{% endif %}>ผู้ป่วยใน IPD (ญ)</option>
+                            <option value="ผู้ป่วยนอก OPD" {% if booking.dpm_sd == "ผู้ป่วยนอก OPD" %}selected{% endif %}>ผู้ป่วยนอก OPD</option>
+                            <option value="ผู้ป่วยตึกพิเศษ Private Room" {% if booking.dpm_sd == "ผู้ป่วยตึกพิเศษ Private Room" %}selected{% endif %}>ผู้ป่วยตึกพิเศษ Private Room</option>
+                            <option value="ผู้ป่วยเด็กและหลังคลอด PP" {% if booking.dpm_sd == "ผู้ป่วยเด็กและหลังคลอด PP" %}selected{% endif %}>ผู้ป่วยเด็กและหลังคลอด PP</option>
+                            <option value="ผู้ป่วยผ่าตัดและวิสัญญี OR" {% if booking.dpm_sd == "ผู้ป่วยผ่าตัดและวิสัญญี OR" %}selected{% endif %}>ผู้ป่วยผ่าตัดและวิสัญญี OR</option>
+                            <option value="ผู้คลอด LR" {% if booking.dpm_sd == "ผู้คลอด LR" %}selected{% endif %}>ผู้คลอด LR</option>
+                            <option value="ควบคุมการติดเชื้อและงานจ่ายกลาง" {% if booking.dpm_sd == "ควบคุมการติดเชื้อและงานจ่ายกลาง" %}selected{% endif %}>ควบคุมการติดเชื้อและงานจ่ายกลาง</option>
+                            <option value="เวชกรรมฟื้นฟู" {% if booking.dpm_sd == "เวชกรรมฟื้นฟู" %}selected{% endif %}>เวชกรรมฟื้นฟู</option>
+                            <option value="แพทย์แผนไทยและแพทย์ทางเลือก" {% if booking.dpm_sd == "แพทย์แผนไทยและแพทย์ทางเลือก" %}selected{% endif %}>แพทย์แผนไทยและแพทย์ทางเลือก</option>
+                            <option value="งานทันตกรรม" {% if booking.dpm_sd == "งานทันตกรรม" %}selected{% endif %}>งานทันตกรรม</option>
+                            <option value="งานการเงินและบัญชี" {% if booking.dpm_sd == "งานการเงินและบัญชี" %}selected{% endif %}>งานการเงินและบัญชี</option>
+                            <option value="งานเกษตรพื้นฐาน" {% if booking.dpm_sd == "งานเกษตรพื้นฐาน" %}selected{% endif %}>งานเกษตรพื้นฐาน</option>
+                            <option value="งานความสะอาด" {% if booking.dpm_sd == "งานความสะอาด" %}selected{% endif %}>งานความสะอาด</option>
+                            <option value="งานซ่อมบำรุง" {% if booking.dpm_sd == "งานซ่อมบำรุง" %}selected{% endif %}>งานซ่อมบำรุง</option>
+                            <option value="งานธุรการ" {% if booking.dpm_sd == "งานธุรการ" %}selected{% endif %}>งานธุรการ</option>
+                            <option value="งานพัสดุ" {% if booking.dpm_sd == "งานพัสดุ" %}selected{% endif %}>งานพัสดุ</option>
+                            <option value="งานยานพาหนะ" {% if booking.dpm_sd == "งานยานพาหนะ" %}selected{% endif %}>งานยานพาหนะ</option>
+                            <option value="งานรักษาความปลอดภัย" {% if booking.dpm_sd == "งานรักษาความปลอดภัย" %}selected{% endif %}>งานรักษาความปลอดภัย</option>
+                            <option value="เทคโนโลยีสารสนเทศ IT" {% if booking.dpm_sd == "เทคโนโลยีสารสนเทศ IT" %}selected{% endif %}>เทคโนโลยีสารสนเทศ IT22222</option>
+                            <option value="เทคนิคการแพทย์" {% if booking.dpm_sd == "เทคนิคการแพทย์" %}selected{% endif %}>เทคนิคการแพทย์</option>
+                            <option value="บริการด้านปฐมภูมิและองค์รวม" {% if booking.dpm_sd == "บริการด้านปฐมภูมิและองค์รวม" %}selected{% endif %}>บริการด้านปฐมภูมิและองค์รวม</option>
+                            <option value="กลุ่มงานจิตเวชและยาเสพติด" {% if booking.dpm_sd == "กลุ่มงานจิตเวชและยาเสพติด" %}selected{% endif %}>กลุ่มงานจิตเวชและยาเสพติด</option>
+                            <option value="กลุ่มงานโภชนศาสตร์" {% if booking.dpm_sd == "กลุ่มงานโภชนศาสตร์" %}selected{% endif %}>กลุ่มงานโภชนศาสตร์</option>
+                            <option value="กลุ่มงานประกันสุขภาพ" {% if booking.dpm_sd == "กลุ่มงานประกันสุขภาพ" %}selected{% endif %}>กลุ่มงานประกันสุขภาพ</option>
+                            <option value="เภสัชกรรมและคุ้มครองผู้บริโภค" {% if booking.dpm_sd == "เภสัชกรรมและคุ้มครองผู้บริโภค" %}selected{% endif %}>เภสัชกรรมและคุ้มครองผู้บริโภค</option>
+                            <option value="กลุ่มงานรังสีวิทยา" {% if booking.dpm_sd == "กลุ่มงานรังสีวิทยา" %}selected{% endif %}>กลุ่มงานรังสีวิทยา</option>
+
                         </select>
                     </div>
 

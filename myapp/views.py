@@ -416,7 +416,7 @@ def calendar_events(request):
             "extendedProps": {
                 "room": booking.room_name,
                 "description": booking.description,
-                "department": booking.h_pr,
+                "dpm_sd": booking.dpm_sd,
                 "attendees": booking.n_count,
                 "requester": booking.n_req,
                 "phone": booking.n_ph,

@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-xug1i+ovuju*$6lxxtqubf6r07k_ff!i6b9zsk%qyx+p_fs5+a
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-ALLOWED_HOSTS = ['smart-meeting-room.onrender.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1','172.30.109.220', 'meeting-room.sdh.go.th' ]
 # smart-meeting-room.onrender.com
 # localhost', '127.0.0.1', '172.30.10.169', 'https://04dd-49-228-178-104.ngrok-free.app
 # Application definition
@@ -128,11 +128,10 @@ USE_TZ = False
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    BASE_DIR / "static",
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
 # Default primary key field type
